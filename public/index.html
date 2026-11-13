@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#343434">
+    <title>Votaciones | Laboratorio ElGamal</title>
+  <link rel="stylesheet" href="./styles.css?v=3">
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="brand"><strong>Laboratorio de criptografía</strong><small>Elección académica · ElGamal</small></div>
+        <div class="top-meta"><span class="live-dot"></span> Entorno local <span class="language">ES</span></div>
+    </header>
+    <nav class="navline"><a class="active" href="#eleccion">PROCESO ACTIVO</a><a href="#auditoria">AUDITORÍA PÚBLICA</a><span class="nav-spacer"></span><span>DEMO EDUCATIVA</span></nav>
+
+  <div id="connection-banner" role="status" style="max-width:1260px;margin:16px auto;padding:12px 16px;border:1px solid #e5d9bd;background:#fffdf7;color:#383836;font:14px/1.5 'Segoe UI',Arial,sans-serif">
+    Para habilitar los botones, inicia la demo con <strong>node server.js</strong> desde la carpeta del proyecto y abre <strong>http://localhost:3000</strong>.
+  </div>
+
+    <main>
+        <section class="hero" id="eleccion">
+            <div class="hero-top"><span>CRIPTOGRAFÍA APLICADA <i></i> VOTACIÓN HOMOMÓRFICA</span><span class="status-pill" id="status-pill">● ABIERTA</span></div>
+            <h1>Votaciones</h1>
+            <p class="subtitle">Representación estudiantil ante el Consejo Académico</p>
+            <p class="hero-note">Una elección simulada para explorar privacidad, pruebas y conteo verificable.</p>
+        </section>
+
+        <div class="notice"><span class="notice-icon">i</span>
+            <div><strong>Prototipo académico</strong>
+                <p>Usa identidades y candidaturas de ejemplo. No es un sistema para elecciones reales.</p>
+            </div><button id="learn-more" class="text-button">¿Qué se demuestra?</button></div>
+
+        <div class="section-heading">
+            <div><span class="eyebrow">01 / ELECCIÓN</span>
+                <h2>Elige una candidatura</h2>
+                <p>Tu selección se cifra en este navegador antes de enviarse.</p>
+            </div>
+            <div class="turnout"><strong id="turnout-count">0</strong><span>de 100 votos recibidos</span>
+                <div class="progress"><span id="turnout-progress"></span></div>
+            </div>
+        </div>
+
+        <section class="election-grid" id="candidate-grid" aria-label="Candidaturas"></section>
+
+        <section class="vote-panel">
+            <div class="panel-copy"><span class="eyebrow">TU PAPELETA</span>
+                <h3>Participa en la simulación</h3>
+                <p>Selecciona una identidad de prueba. Cada identidad puede emitir una papeleta en esta sesión.</p>
+            </div>
+            <div class="vote-controls"><label for="voter-select">Identidad simulada</label>
+                <div class="control-row"><select id="voter-select" aria-label="Identidad simulada"></select><button id="cast-vote" class="button-primary" disabled>Emitir voto <span>→</span></button></div><small>La identidad se usa solo para evitar votos duplicados. No se publica junto a la papeleta.</small></div>
+        </section>
+
+        <section class="how-section">
+            <div class="how-heading"><span class="eyebrow">EL PROCESO</span>
+                <h2>De la papeleta al resultado</h2>
+            </div>
+            <div class="steps">
+                <article><span class="step-number">01</span>
+                    <div>
+                        <h3>Cifrado local</h3>
+                        <p>El navegador cifra cada opción con ElGamal exponencial.</p>
+                    </div>
+                </article>
+                <article><span class="step-number">02</span>
+                    <div>
+                        <h3>Pruebas públicas</h3>
+                        <p>La papeleta demuestra que el voto es válido sin revelar la selección.</p>
+                    </div>
+                </article>
+                <article><span class="step-number">03</span>
+                    <div>
+                        <h3>Conteo verificable</h3>
+                        <p>Los criptogramas se agregan y cualquiera puede revisar la auditoría.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="audit-section" id="auditoria">
+            <div class="section-heading audit-heading">
+                <div><span class="eyebrow">02 / TRANSPARENCIA</span>
+                    <h2>Tablón público</h2>
+                    <p>Las papeletas se publican cifradas y enlazadas por hashes.</p>
+                </div><button id="audit-button" class="button-outline">Verificar elección <span>↗</span></button></div>
+            <div class="board-card">
+                <div class="board-header">
+                    <div><span class="live-dot"></span><strong>Registro de papeletas</strong></div><span id="board-count">0 ENTRADAS</span></div>
+                <div id="board-list" class="board-list">
+                    <div class="empty-state"><span class="empty-symbol">⌁</span>
+                        <p>Aún no hay papeletas en el tablón.</p><small>Las papeletas cifradas aparecerán aquí.</small></div>
+                </div>
+                <div class="board-footer"><span>Hash encadenado SHA-256</span><span>Datos públicos · identidades omitidas</span></div>
+            </div>
+        </section>
+
+        <section class="result-section hidden" id="result-section">
+            <div class="result-top">
+                <div><span class="eyebrow">03 / RESULTADO</span>
+                    <h2>Conteo de la elección</h2>
+                    <p>Se descifró únicamente el total agregado de cada candidatura.</p>
+                </div>
+                <div class="winner-badge">ELECCIÓN CERRADA</div>
+            </div>
+            <div id="result-list" class="result-list"></div>
+            <div class="proof-card"><span class="proof-icon">✓</span>
+                <div><strong>Prueba de descifrado publicada</strong>
+                    <p>La auditoría puede comprobar que cada total corresponde al criptograma agregado.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-panel">
+            <div><span class="eyebrow">CONTROLES DE LA DEMO</span>
+                <h3>Gestionar simulación</h3>
+                <p>Genera hasta 100 votos aleatorios o cierra la elección para ver el conteo.</p>
+            </div>
+            <div class="admin-actions"><button id="simulate-button" class="button-secondary">Simular votos restantes</button><button id="close-button" class="button-primary">Cerrar y contar <span>→</span></button><button id="reset-button" class="button-quiet">Reiniciar</button></div>
+            <div
+                id="simulation-progress" class="simulation-progress hidden">
+                <div class="progress"><span id="simulation-progress-bar"></span></div><small id="simulation-progress-label">Preparando simulación…</small></div>
+        </section>
+
+        <footer>
+            <div class="footer-line"></div>
+            <div class="footer-content"><span>DEMO ACADÉMICA · ELGAMAL EXPONENCIAL</span><span>Construida para aprendizaje y discusión</span></div>
+            <p>Sin despliegue público · Sin datos personales · Sin uso electoral real</p>
+        </footer>
+    </main>
+
+    <dialog id="info-dialog"><button class="dialog-close" id="dialog-close" aria-label="Cerrar">×</button><span class="eyebrow">NOTA ACADÉMICA</span>
+        <h2>¿Qué demuestra esta aplicación?</h2>
+        <p>Ilustra el cifrado homomórfico de ElGamal: multiplicar papeletas cifradas permite sumar los votos sin descifrarlos uno por uno. Las pruebas de conocimiento cero permiten validar cada papeleta sin publicar la selección.</p>
+        <p>El prototipo usa parámetros de 2048 bits y pruebas Fiat–Shamir. Aun así, el servidor conserva una sola clave, las identidades son simuladas y el tablón depende de una sola instancia. No cuenta con auditoría formal ni debe usarse para elecciones
+            reales.</p><button class="button-primary" id="dialog-ok">Entendido</button></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js?v=1"></script>
+</body>
+
+</html>
